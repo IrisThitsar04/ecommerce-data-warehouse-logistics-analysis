@@ -78,7 +78,7 @@ These checks ensured the data structure and quality were understood before featu
 ## Data Architecture
 
 The project uses a star schema warehouse design consisting of fact and dimension tables optimized for analytical queries.
-
+![Schema](warehouse_schema.png)
 ### Dimension Tables
 
 | Table         | Description                                         |
@@ -173,7 +173,7 @@ To simplify analytical queries and support BI reporting, several SQL views were 
 These views simplify complex queries and allow BI tools to directly access prepared analytical metrics. The `order_item_analytics` view serves as the **primary analytical dataset for the dashboards**, combining order, product, seller, customer, and delivery information into a single queryable structure for business intelligence analysis.
 
 ## Dashboard 1: Marketplace Logistics Performance
-
+![Dashboard 1](dashboards/dashboard1.png)
 ### Purpose
 This dashboard provides a high-level view of marketplace logistics performance. It enables analysis of revenue growth, delivery reliability, and shipping cost efficiency across product categories and geographic regions. It is designed to identify where delivery issues and logistics inefficiencies occur within the marketplace.
 
@@ -216,7 +216,7 @@ Overall delivery performance is strong, with 93.55% of orders delivered on time 
 Although delayed deliveries represent a relatively small share of total orders, delays exceeding seven days account for nearly 3% of deliveries, which may significantly impact customer satisfaction.
 
 ## Dashboard 2: Seller Operational Efficiency & Risk Analysis
-
+![Dashboard 2](dashboards/dashboard2.png)
 ### Purpose
 This dashboard analyzes seller-level logistics performance to identify operational inefficiencies and classify sellers based on shipping cost and delivery reliability.
 It supports the identification of high-risk sellers and evaluates how seller performance impacts overall marketplace revenue and operational risk.
