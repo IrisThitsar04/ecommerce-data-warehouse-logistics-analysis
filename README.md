@@ -1,30 +1,79 @@
 # Marketplace Logistics & Seller Performance Analytics
 
 ## Project Overview
-This project develops a business intelligence and data warehousing solution to analyse logistics performance, seller efficiency, and delivery reliability in an e-commerce marketplace.
 
-Raw marketplace transaction data is processed through an analytics pipeline and transformed into a dimensional data warehouse. Data quality validation ensures integrity before the data powers interactive business intelligence dashboards. These dashboards evaluate revenue growth, shipping cost ratios, delivery delays, geographic delivery issues, and seller operational risk across the marketplace.
+This project develops a business intelligence and data warehousing solution to analyze logistics performance, seller efficiency, and delivery reliability in a multi-seller e-commerce marketplace.
+
+The analysis is based on the **Olist E-commerce dataset**, which includes nine relational datasets:
+
+- `olist_orders_dataset`
+- `olist_order_items_dataset`
+- `olist_order_payments_dataset`
+- `olist_order_reviews_dataset`
+- `olist_customers_dataset`
+- `olist_sellers_dataset`
+- `olist_products_dataset`
+- `olist_geolocation_dataset`
+- `product_category_name_translation_dataset`
+
+These datasets capture marketplace transactions, customer activity, product information, seller operations, payments, reviews, and geographic data.
+
+The project integrates these datasets into a **dimensional data warehouse** and develops business intelligence dashboards to analyze marketplace logistics performance, delivery reliability, and seller operational efficiency.
 
 The final outputs include:
-- **A star-schema data warehouse**
-- **ETL pipeline with validation**
+
+- **Star-schema data warehouse**
+- **Data preparation and validation pipeline**
 - **SQL analytical views**
-- **Interactive dashboards**
+- **Interactive Tableau dashboards**
 - **Business insights derived from the analysis**
 
 ## Analytics Pipeline Overview
 
 The project follows a layered data analytics architecture that transforms raw marketplace data into business intelligence insights.
 
-Raw marketplace datasets are processed using Python for data preparation and feature engineering.  
-Data quality validation is performed using Great Expectations before the cleaned data is loaded into a PostgreSQL dimensional data warehouse.
+- Raw marketplace datasets are processed using Python for data preparation and feature engineering.  
 
-SQL analytical views provide a semantic layer that simplifies complex queries for business intelligence reporting.  
-Finally, Tableau dashboards visualize marketplace logistics performance and seller operational efficiency.
+- Data quality validation is performed using Great Expectations before the cleaned data is loaded into a PostgreSQL dimensional data warehouse.
 
-**Pipeline Flow**
+- SQL analytical views provide a semantic layer that simplifies complex queries for business intelligence reporting. 
 
-Raw Data → Python Processing → Data Validation → Data Warehouse (PostgreSQL) → SQL Views → Tableau Dashboards
+- Finally, Tableau dashboards visualize marketplace logistics performance and seller operational efficiency.
+
+**Pipeline Flow:**
+Raw Data -> Data Preparation (Python) -> Data Validation -> Data Warehouse (PostgreSQL) -> SQL Views -> Tableau Dashboards
+
+## Business Questions Addressed
+### Primary Business Problem
+
+How can a multi-seller e-commerce marketplace identify seller and logistics inefficiencies that negatively impact operational efficiency, delivery reliability, and customer experience?
+
+### Supplementary Analytical Questions
+
+- Which high-revenue sellers exhibit inefficient logistics performance when shipping costs and delivery reliability are considered?
+
+- Which sellers exhibit the highest late delivery rates and shipping cost inefficiencies that contribute to operational risk in the marketplace?
+
+- How concentrated is marketplace revenue among sellers, and what operational risks may arise from this concentration?
+
+- Which product categories exhibit the highest shipping cost relative to product value, and what does this indicate about logistics efficiency across product types?
+
+- Which customer regions experience the highest frequency of delivery issues?
+
+## Exploratory Data Analysis (EDA)
+
+Exploratory Data Analysis (EDA) was conducted to understand the structure and quality of the raw marketplace datasets before building the analytical pipeline.
+
+Key checks included:
+
+- **Dataset structure inspection**, reviewing column meanings, table relationships, and dataset sizes  
+- **Value range analysis**, examining minimum and maximum values for numerical fields and timestamps  
+- **Categorical analysis**, assessing unique values and frequency distributions for fields such as order status and payment types  
+- **Missing value analysis**, identifying missing fields and evaluating whether they reflected expected operational scenarios (e.g., cancelled orders or optional reviews)  
+- **Geographic validation**, verifying consistency of latitude and longitude records in geolocation data  
+- **Logical consistency checks**, validating relationships between related fields such as review comments and response timestamps  
+
+These checks ensured the data structure and quality were understood before feature engineering and warehouse integration.
 
 ## Data Architecture
 
@@ -53,43 +102,6 @@ These fact tables capture marketplace activity at different levels of granularit
 - order-level events
 - item-level transactions
 - seller-level performance metrics
-
-
-## Business Questions Addressed
-### Primary Business Problem
-
-How can a multi-seller e-commerce marketplace identify seller and logistics inefficiencies that negatively impact operational efficiency, delivery reliability, and customer experience?
-
-### Supplementary Analytical Questions
-
-- Which high-revenue sellers exhibit inefficient logistics performance when shipping costs and delivery reliability are considered?
-
-- Which sellers exhibit the highest late delivery rates and shipping cost inefficiencies that contribute to operational risk in the marketplace?
-
-- How concentrated is marketplace revenue among sellers, and what operational risks may arise from this concentration?
-
-- Which product categories exhibit the highest shipping cost relative to product value, and what does this indicate about logistics efficiency across product types?
-
-- Which customer regions experience the highest frequency of delivery issues?
-
-These analytical questions are addressed through two business intelligence dashboards.
-
-The **Marketplace Logistics Performance** dashboard examines revenue trends, shipping cost ratios by product category, delivery delays, and geographic delivery issues.
-
-The **Seller Operational Efficiency** dashboard analyzes seller freight ratios and late delivery rates to classify seller risk levels, examine revenue concentration among sellers, and identify high-risk sellers impacting marketplace operations.
-
-## Exploratory Data Analysis (EDA)
-
-Exploratory Data Analysis was conducted to understand the structure and quality of the raw marketplace datasets before building the analytical pipeline through several checks:
-
-- **Structural inspection of datasets**, including column meanings, table relationships, and dataset sizes
-- **Value range analysis**, examining minimum and maximum values for numerical fields and timestamp columns to understand data coverage
-- **Categorical analysis**, reviewing unique values and frequency distributions for fields such as order status, payment type, and other categorical variables
-- **Missing value analysis**, identifying missing fields and assessing whether they reflected expected operational scenarios (e.g., cancelled orders or optional review comments)
-- **Geographic data validation**, verifying consistency of latitude and longitude records in geolocation data
-- **Logical consistency checks**, validating relationships between related fields such as review comments and response timestamps
-
-These checks helped confirm dataset structure, understand missing data patterns, and ensure the data could be reliably prepared for feature engineering and warehouse integration.
 
 ## Data Processing Pipeline
 
@@ -150,7 +162,7 @@ To simplify analytical queries and support BI reporting, several SQL views were 
 
 | View                            | Purpose                                                                            |
 | ------------------------------- | ---------------------------------------------------------------------------------- |
-| seller_freight_ratio      | Freight cost as a percentage of product revenue for each seller.                    |
+| seller_freight_ratio      | Freight cost as a percentage of product revenue for each seller.                     |
 | seller_late_delivery_rate   | Late delivery rate for each seller.                                                |
 | category_revenue            | Total revenue by product category.                                                 |
 | customer_issue_rate         | Delivery issue rate (late or failed orders) by customer state.                     |
@@ -158,13 +170,12 @@ To simplify analytical queries and support BI reporting, several SQL views were 
 | seller_revenue              | Total revenue generated by each seller.                                            |
 | category_late_delivery_rate | Late delivery rate by product category.                                            |
 | order_item_analytics        | Fully joined analytical dataset used for dashboard queries.                        |
-These views simplify complex queries and allow BI tools to directly access prepared analytical metrics.
+These views simplify complex queries and allow BI tools to directly access prepared analytical metrics. The `order_item_analytics` view serves as the **primary analytical dataset for the dashboards**, combining order, product, seller, customer, and delivery information into a single queryable structure for business intelligence analysis.
 
 ## Dashboard 1: Marketplace Logistics Performance
 
 ### Purpose
-
-This dashboard evaluates overall marketplace logistics performance, focusing on delivery reliability, shipping cost efficiency, and revenue trends across the platform.
+This dashboard provides a high-level view of marketplace logistics performance. It enables analysis of revenue growth, delivery reliability, and shipping cost efficiency across product categories and geographic regions. It is designed to identify where delivery issues and logistics inefficiencies occur within the marketplace.
 
 ### Key Metrics
 
@@ -179,32 +190,38 @@ The dashboard includes high-level KPIs summarizing operational performance:
 
 The dashboard includes several analytical visualizations:
 
-- **Revenue Trend Analysis** : Monthly marketplace revenue growth
-- **Shipping Cost Efficiency by Product Category** : Freight cost as a percentage of product revenue
-- **Delivery Issue Distribution by State** : Geographic variation in delivery issues
-- **Delivery Delay Severity Distribution** : Breakdown of delay durations across orders
-
+- **Marketplace Revenue Growth Over Time** : Yearly marketplace revenue growth
+- **Shipping Cost vs Revenue by Top 10 Product Categories** : Freight cost as a percentage of product revenue across major product categories
+- **Order Issue Rate by Customer State** : Geographic variation in delivery issues (late deliveries or failed orders)
+- **Order Distribution by Delivery Delay** : Breakdown of delivery delay ranges across orders
+  
 ### Key Insights
 
-**Revenue Growth**: 
-Marketplace revenue increased significantly between 2016 and 2018, indicating rapid platform expansion and increasing transaction volume.
+**Marketplace Revenue Growth Over Time**: 
+Marketplace revenue increased substantially between 2016 and 2017 and continued to grow in 2018. This trend indicates rapid platform expansion, indicating increased transaction volume and marketplace activity over time.
 
-**Shipping Cost Efficiency by Product Category**: 
-Shipping cost ratios vary considerably across product categories. Several categories exceed 20% of product revenue, particularly furniture and home-related items that require larger or more fragile shipping.
+**Shipping Cost vs Revenue by Top 10 Product Categories**: 
+Shipping costs vary significantly across product categories. Several categories exceed 20% of product revenue, with the highest reaching approximately 24%. Categories such as furniture_decor, housewares, garden_tools, and bed_bath_table show the highest shipping ratios, likely due to larger or more fragile items requiring specialized packaging and transportation.
 
-**Geographic Distribution of Delivery Issues**: 
-Delivery issue rates vary across states, with some regions exceeding 20%. Late deliveries are the primary contributor to these issues.
+**Order Issue Rate by Customer State**: 
+Delivery issue rates vary considerably across customer states. The two states with the highest issue rates exceed 20%, while most other states show lower but still notable issue levels. Late deliveries occur more frequently than failed orders, indicating that delivery delays are the primary contributor to order issues.
 
-**Delivery Delay Severity**: 
-Although the majority of orders are delivered on time, approximately 3% of deliveries experience delays exceeding seven days, which may negatively impact customer satisfaction.
+**Order Distribution by Delivery Delay**: 
+Overall delivery performance is strong, with 93.55% of orders delivered on time or early. However, a small proportion of deliveries experience delays:
+* 0–1 day delay: 0.83% of orders
+* 1–3 days delay: 1.04%
+* 3–7 days delay: 1.78%
+* 7+ days delay: 2.79%
+  
+Although delayed deliveries represent a relatively small share of total orders, delays exceeding seven days account for nearly 3% of deliveries, which may significantly impact customer satisfaction.
 
 ## Dashboard 2: Seller Operational Efficiency & Risk Analysis
-### Purpose
 
-This dashboard evaluates seller logistics performance across the marketplace, focusing on shipping cost efficiency, delivery reliability, and operational risk among sellers.
+### Purpose
+This dashboard analyzes seller-level logistics performance to identify operational inefficiencies and classify sellers based on shipping cost and delivery reliability.
+It supports the identification of high-risk sellers and evaluates how seller performance impacts overall marketplace revenue and operational risk.
 
 ### Key Metrics
-
 The dashboard includes high-level KPIs summarizing seller operational performance:
 - **Total Active Sellers**: 3,095
 - **Average Freight Ratio**: 16.57%
@@ -212,26 +229,36 @@ The dashboard includes high-level KPIs summarizing seller operational performanc
 - **High-Risk Sellers**: 16.19%
 
 ### Main Analyses
-
 The dashboard includes several analytical visualizations:
-- **Revenue Concentration Analysis** : Revenue contribution of the top marketplace sellers
+- **Revenue Concentration Among Top 20 Sellers** : Revenue contribution of the highest-performing marketplace sellers
 - **Seller Operational Efficiency Matrix** : Scatter plot comparing freight ratio and late delivery rate to classify seller risk levels
 - **Top High-Risk Sellers** : Ranked list of sellers with the highest logistics risk based on shipping cost ratios and delivery delays
-- **Revenue Distribution by Seller Risk Level** : Comparison of marketplace revenue generated by sellers across different operational risk categories
+- **Revenue Distribution by Seller Risk Level** : Comparison of revenue generated by sellers across different operational risk categories
 
 ### Key Insights
 
-**Revenue Concentration:**
-The top 20 sellers generate approximately 21.09% of total marketplace revenue, indicating a moderate concentration of revenue among high-performing sellers.
+**Revenue Concentration Among Top 20 Sellers:**
+Approximately 21.09% of total marketplace revenue is generated by the top 20 sellers. This indicates moderate revenue concentration, where a relatively small group of sellers contributes a substantial share of platform revenue.
 
 **Seller Operational Efficiency:**
-Seller logistics performance varies significantly across the marketplace. Some sellers operate with low shipping costs and reliable delivery performance, while others show inefficiencies such as high freight ratios or delivery delays.
+Seller logistics performance varies considerably across the marketplace. While many sellers maintain low freight ratios and reliable delivery performance, others exhibit both high shipping costs and high late delivery rates, placing them in the high-risk operational quadrant.
 
-**High-Risk Sellers:**
-Several sellers exceed the 17% freight ratio benchmark, with some cases where shipping costs exceed the value of the product itself. These sellers represent operational risk due to inefficient logistics relative to product value.
+**Top High-Risk Sellers:**
+The analysis of the top high-risk sellers shows that many exceed the 17% freight ratio benchmark, often by a substantial margin. In several cases, shipping costs exceed the value of the product itself, with some sellers exceeding 100% freight-to-revenue ratios. This indicates inefficient logistics relative to product value.
 
 **Revenue by Seller Risk Level:**
-Efficient sellers generate the largest share of marketplace revenue, contributing approximately €4.5M. Sellers classified as High Delay Risk and High Shipping Cost still contribute substantial revenue, while sellers categorized as High Risk generate the smallest share.
+Efficient sellers generate the largest share of marketplace revenue, contributing approximately €4.5M. Sellers classified as High Delay Risk and High Shipping Cost generate similar revenue levels (around €3.4M and €3.3M respectively), while High-Risk sellers contribute the smallest share (approximately €2.3–€2.5M).
+This suggests that operational inefficiencies persist even among sellers generating meaningful revenue, highlighting opportunities to improve overall marketplace logistics efficiency.
+
+## Linking Insights to Business Questions
+
+The two dashboards collectively address the analytical questions defined earlier.
+
+- The **Marketplace Logistics Performance dashboard** provides a marketplace-level perspective on delivery reliability, shipping efficiency, and geographic distribution of delivery issues.
+
+- The **Seller Operational Efficiency dashboard** provides a seller-level perspective, identifying high-risk sellers and evaluating how logistics inefficiencies impact revenue contribution.
+
+Together, these dashboards connect operational performance with business impact, enabling identification of inefficiencies at both marketplace and seller levels.
 
 ## Technologies Used
 
@@ -240,3 +267,11 @@ Efficient sellers generate the largest share of marketplace revenue, contributin
 - **Data Validation**: Great Expectations
 - **Business Intelligence**: Tableau Desktop
 - **Development Environment**: Jupyter Notebook
+
+## Conclusion
+
+This project demonstrates how raw e-commerce data can be transformed into a structured analytical solution using a dimensional data warehouse and business intelligence dashboards.
+
+By integrating multiple datasets, validating data quality, and modeling key performance metrics, the analysis provides actionable insights into logistics efficiency, delivery reliability, and seller performance.
+
+While overall marketplace performance is strong, the results highlight that operational inefficiencies persist among certain sellers and product categories, presenting clear opportunities for targeted optimization.
