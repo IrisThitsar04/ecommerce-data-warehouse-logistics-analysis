@@ -162,7 +162,8 @@ The `order_item_analytics` view serves as the **primary analytical dataset for t
 
 ## Dashboard 1: Marketplace Delivery Performance & Logistics Overview
 
-![Dashboard 1](dashboards/dashboard1.png)
+[![Dashboard 1](dashboards/dashboard1.png)](https://public.tableau.com/app/profile/iris.thitsar/viz/olist_ecommerce_tableaupublic/Dashboard1?publish=yes)
+
 ### Purpose
 This dashboard provides a high-level view of marketplace logistics performance. It enables analysis of revenue growth, delivery reliability, and shipping cost efficiency across product categories and geographic regions. It is designed to identify where delivery issues and logistics inefficiencies occur within the marketplace.
 
@@ -205,7 +206,8 @@ Overall delivery performance is strong, with 93.55% of orders delivered on time 
 Although delayed deliveries represent a relatively small share of total orders, delays exceeding seven days account for nearly 3% of deliveries, which may significantly impact customer satisfaction.
 
 ## Dashboard 2: Seller Operational Efficiency & Risk Analysis
-![Dashboard 2](dashboards/dashboard2.png)
+[![Dashboard 2](dashboards/dashboard2.png)](https://public.tableau.com/app/profile/iris.thitsar/viz/olist_ecommerce3/Dashboard12?publish=yes)
+
 ### Purpose
 This dashboard analyzes seller-level logistics performance to identify operational inefficiencies and classify sellers based on shipping cost and delivery reliability.
 It supports the identification of high-risk sellers and evaluates how seller performance impacts overall marketplace revenue and operational risk.
